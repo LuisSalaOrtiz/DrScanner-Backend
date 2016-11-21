@@ -35,7 +35,7 @@ app.get('/db', function (request, response) {
   });
 });
 
-app.get('/users/:email', function (request, response) {
+app.get('/users/:email/', function (request, response) {
   pg.connect(url, function(err, client, done) {
     client.query('SELECT email,password,type FROM users WHERE email=\"' + request.params.email+'\"', function(err, result) {
       done();

@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+
 var pg = require('pg');
 pg.defaults.ssl = true;
 
@@ -34,9 +35,9 @@ app.get('/db', function (request, response) {
   });
 });
 
-app.get('/users', function (request, response) {
+app.get('/users/:email', function (request, response) {
   pg.connect(url, function(err, client, done) {
-    client.query('SELECT * FROM users', function(err, result) {
+    client.query('SELECT email,password,type FROM users WHERE email=\"' + request.params.email+'\"', function(err, result) {
       done();
       if (err)
        { console.error(err); response.send("Error " + err); }
@@ -51,6 +52,24 @@ app.get('/users', function (request, response) {
     });
   });
 });
+
+// app.get('/patients/', function (request, response) {
+//   pg.connect(url, function(err, client, done) {
+//     client.query('SELECT * FROM users', function(err, result) {
+//       done();
+//       if (err)
+//        { console.error(err); response.send("Error " + err); }
+//       else
+//        {
+//
+//         //  response.render('pages/db', {results: result.rows} );
+//           response.json(result.rows);
+//           console.log(result.rows);
+//
+//          }
+//     });
+//   });
+// });
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));

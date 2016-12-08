@@ -53,6 +53,24 @@ app.get('/users/:email/', function (request, response) {
   });
 });
 
+app.get('/patients/:qrcode/', function (request, response) {
+  pg.connect(url, function(err, client, done) {
+    client.query(('select qrcode, patient.pid, pfirst, plast, ssn, birth, email, marital, gender, phone, weight, height, blood, address, hcname, hcnum, hcexp, vdate, dfirst, dlast, specialty, cname, severity from (patient natural inner join (personal_info natural left join address natural left join healthcare) natural left join ((visits natural left join doctor) natural left join diagnostic natural left join condition)) where patient.qrcode=\'').concat(request.params.qrcode.concat("\'")), function(err, result) {
+      done();
+      if (err)
+       { console.error(err); response.send("Error " + err); }
+      else
+       {
+
+        //  response.render('pages/db', {results: result.rows} );
+          response.json(result.rows);
+          console.log(result.rows);
+
+         }
+    });
+  });
+});
+
 // app.get('/patients/', function (request, response) {
 //   pg.connect(url, function(err, client, done) {
 //     client.query('SELECT * FROM users', function(err, result) {

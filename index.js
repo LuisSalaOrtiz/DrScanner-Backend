@@ -69,14 +69,14 @@ app.get('/patients/:qrcode/', function (request, response) {
   });
 });
 
-app.post('/post/user/:password/:type/:email/',function(request, response) {
+app.post('/post/user/:password/:type/:email/',function(request, response, next) {
   // const pass = request.params.password;
   // const type = request.params.type;
   // const mail = request.params.email;
   const data = {pass: request.params.password, type: request.params.type, mail: request.params.email};
   console.log(data);
   pg.connect(url, function(err, client, done) {
-    client.query('insert into users password, type, email values ($1, $2, $3)', [data.pass, data.type, data.mail]);
+    client.query('insert into users password, type, email values $1, $2, $3', [data.pass, data.type, data.mail]);
     if(err) {
       done();
       console.log(err);

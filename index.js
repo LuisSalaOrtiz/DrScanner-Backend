@@ -1,5 +1,4 @@
 var express = require('express');
-const router = express.Router();
 var app = express();
 
 var pg = require('pg');
@@ -70,7 +69,7 @@ app.get('/patients/:qrcode/', function (request, response) {
   });
 });
 
-router.post('/post/user/:password/:type/:email/',function(request, response) {
+app.post('/post/user/:password/:type/:email/',function(request, response) {
   const pass = request.params.password;
   const type = request.params.type;
   const email = request.params.email;

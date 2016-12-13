@@ -1,6 +1,5 @@
 var express = require('express');
 var app = express();
-var router = express.Router();
 
 var pg = require('pg');
 pg.defaults.ssl = true;
@@ -70,10 +69,10 @@ app.get('/patients/:qrcode/', function (request, response) {
   });
 });
 
-router.post('/post/user/:password/:type/:email/',function(request, response) {
-  var pass = request.params.password;
-  var type = request.params.type;
-  var email = request.params.email;
+app.get('/post/user/:password/:type/:email/',function(request, response) {
+  const pass = request.params.password;
+  const type = request.params.type;
+  const email = request.params.email;
   pg.connect(url, function(err, client, done) {
     client.query('insert into users (password, type, email) values (\'$1\', \'$2\', \'$3\')', [pass, type, email]), function(err, result) {
       done();

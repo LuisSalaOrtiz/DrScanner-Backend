@@ -75,7 +75,7 @@ router.post('/post/user/:password/:type/:email/',function(request, response) {
   var type = request.params.type;
   var email = request.params.email;
   pg.connect(url, function(err, client, done) {
-    client.query('insert into users (password, type, email) values ($1, $2, $3)', [pass, type, email]), function(err, result) {
+    client.query('insert into users (password, type, email) values (\'$1\', \'$2\', \'$3\')', [pass, type, email]), function(err, result) {
       done();
       if (err)
        { console.error(err); response.send("Error " + err); }

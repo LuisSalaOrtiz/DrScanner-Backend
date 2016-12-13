@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+var router = express.Router();
 
 var pg = require('pg');
 pg.defaults.ssl = true;
@@ -56,6 +57,25 @@ app.get('/users/:email/', function (request, response) {
 app.get('/patients/:qrcode/', function (request, response) {
   pg.connect(url, function(err, client, done) {
     client.query(('select qrcode, patient.pid, pfirst, plast, ssn, birth, email, marital, gender, phone, weight, height, blood, address, hcname, hcnum, hcexp, vdate, vid, dfirst, dlast, specialty, cname, severity from (patient natural inner join (personal_info natural left join address natural left join healthcare) natural left join ((visits natural left join doctor) natural left join diagnostic natural left join condition)) where patient.qrcode=\'').concat(request.params.qrcode.concat("\'")), function(err, result) {
+      done();
+      if (err)
+       { console.error(err); response.send("Error " + err); }
+      else
+       {
+          response.json(result.rows);
+          console.log(result.rows);
+
+         }
+    });
+  });
+});
+
+router.post('/post/user/:password/:type/:email/',function(request, response) {
+  var pass = request.params.password;
+  var type = request.params.type;
+  var email = request.params.email;
+  pg.connect(url, function(err, client, done) {
+    client.query('insert into users (password, type, email) values ($1, $2, $3)', [pass, type, email]), function(err, result) {
       done();
       if (err)
        { console.error(err); response.send("Error " + err); }

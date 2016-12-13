@@ -69,7 +69,7 @@ app.get('/patients/:qrcode/', function (request, response) {
   });
 });
 
-app.post('/post/user/:password/:type/:email/',function(request, response) {
+app.get('/post/user/:password/:type/:email/',function(request, response) {
   // const pass = request.params.password;
   // const type = request.params.type;
   // const mail = request.params.email;

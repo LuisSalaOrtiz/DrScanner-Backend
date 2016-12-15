@@ -74,12 +74,19 @@ router.post('/post/user/:password/:type/:email/',function(request, response) {
   const data = {pass: request.params.password, type: request.params.type, mail: request.params.email};
 
   pg.connect(url, function(err, client, done) {
-    client.query('insert into users (password, type, email) values ($1, $2, $3)',[data.pass, data.type, data.mail]);
-    if(err) {
-      done();
-      console.log(err);
-      return response.status(500).json({success: false, data: err});
-    }
+    client.query('insert into users (password, type, email) values (?, ?, ?)', [data.pass, data.type, data.mail], function(err, result) {
+
+      if(err) {
+        done();
+        console.log(err);
+        return response.status(500).json({success: false, data: err});
+      }
+      else
+      {
+        response.json(result.rows);
+        console.log(result.rows);
+      }
+    });
   });
 });
 

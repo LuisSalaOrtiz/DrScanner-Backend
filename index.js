@@ -70,7 +70,7 @@ app.get('/patients/:qrcode/', function (request, response) {
   });
 });
 
-router.post('/post/user/',function(request, response) {
+router.post('/post/user/', express.json(), function(request, response) {
   const data = {pass: request.body.password, type: request.body.type, mail: request.body.email};
 
   pg.connect(url, function(err, client, done) {

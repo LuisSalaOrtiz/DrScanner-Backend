@@ -14,6 +14,9 @@ app.use(express.static(__dirname + '/public'));
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 
+var research = require('./routes/researchRoutes');
+app.use('/investigacion', research);
+
 app.get('/', function(request, response) {
   response.render('pages/index');
 });
@@ -70,28 +73,45 @@ app.get('/patients/:qrcode/', function (request, response) {
   });
 });
 
-router.post('/post/user/',function(request, response) {
-  const data = {pass: request.body.password, type: request.body.type, mail: request.body.email};
- console.log(data);
- console.log(data);
- console.log(data);
- console.log(data);
-  pg.connect(url, function(err, client, done) {
-    client.query('insert into users (password, type, email) values ($1, $2, $3)', [data.pass, data.type, data.mail], function(err, result) {
+// router.post('/post/user/',function(request, response) {
+//   const data = {pass: request.body.password, type: request.body.type, mail: request.body.email};
+//
+//   pg.connect(url, function(err, client, done) {
+//     client.query('insert into users (password, type, email) values ($1, $2, $3)', [data.pass, data.type, data.mail], function(err, result) {
+//
+//       if(err) {
+//         done();
+//         console.log(err);
+//         return response.status(500).json({success: false, data: err});
+//       }
+//       else
+//       {
+//         response.json(result.rows);
+//         console.log(result.rows);
+//       }
+//     });
+//   });
+// });
 
-      if(err) {
-        done();
-        console.log(err);
-        return response.status(500).json({success: false, data: err});
-      }
+router.post('/post/user/', function(req, res, next) {
+
+  if(!req.body.hasOwnProperty('password')|| !req.body.hasOwnProperty('type') || !req.body.hasOwnProperty('email')) {
+    res.statusCode = 400;
+    return res.send('Error: Missing fields for event.');
+  }
+  pg.connect(url, function(err, client, done) {
+    client.query('insert into users (password, type, email) values ($1, $2, $3)',[req.body.password,req.body.type,req.body.email], function(err, result) {
+
+      if (err)
+      { console.error(err); response.send("Error " + err); }
       else
-      {
-        response.json(result.rows);
-        console.log(result.rows);
-      }
+      res.json(result.rows);
+      //console.log(result.rows)
+      done();
     });
   });
 });
+
 
 app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));

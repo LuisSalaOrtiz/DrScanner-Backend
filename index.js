@@ -3,7 +3,6 @@ const router = express.Router();
 var app = express();
 
 var bodyParser = require('body-parser');
-app.use(bodyParser.json()); // support json encoded bodies
 app.use(bodyParser.urlencoded({ extended: true }));
 
 var pg = require('pg');
@@ -75,7 +74,7 @@ app.get('/patients/:qrcode/', function (request, response) {
 });
 
 app.post('/post/user/', function(request, response) {
-  const data = {pass: request.body.password, type: request.body.type, mail: request.body.email};
+  const data = {pass: request.params.password, type: request.params.type, mail: request.params.email};
 
   pg.connect(url, function(err, client, done) {
     client.query('insert into users (password, type, email) values (\'$1\', \'$2\', \'$3\')', [data.pass, data.type, data.mail], function(err, result) {

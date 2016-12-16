@@ -96,7 +96,8 @@ app.get('/patients/:qrcode/', function (request, response) {
 
 app.post('/post/user/', function(request, response) {
   const data = {pass: request.body.password, type: request.body.type, mail: request.body.email};
-
+console.log('Post new user');
+console.log(data);
   pg.connect(url, function(err, client, done) {
     client.query('insert into users (password, type, email) values (\'$1\', \'$2\', \'$3\')', [data.pass, data.type, data.mail], function(err, result) {
 

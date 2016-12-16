@@ -93,7 +93,7 @@ app.get('/patients/:qrcode/', function (request, response) {
 //   });
 // });
 
-router.post('/post/user/', function(req, res) {
+router.post('/post/user/', function(req, res, next) {
 
   if(!req.body.hasOwnProperty('password')|| !req.body.hasOwnProperty('type') || !req.body.hasOwnProperty('email')) {
     res.statusCode = 400;

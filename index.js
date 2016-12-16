@@ -5,11 +5,19 @@ var app = express();
 var pg = require('pg');
 pg.defaults.ssl = true;
 
+var bodyParser = require('body-parser')
+app.use(bodyParser.json());       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+extended: true}));
+
+app.use(express.json());
+app.use(express.urlencoded());
+app.use(express.multipart());
+
 var url = "postgres://mkzqrshajdrfgl:Rvh7iuqboKBniQR9jSA8Qivdpa@ec2-54-235-221-102.compute-1.amazonaws.com:5432/d838fcj8sslfn";
 app.set('port', (process.env.PORT || 5000));
 
 app.use(express.static(__dirname + '/public'));
-app.use(express.json());   
 
 // views is directory for all template files
 app.set('views', __dirname + '/views');

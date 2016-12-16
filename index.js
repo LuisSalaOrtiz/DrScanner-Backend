@@ -2,6 +2,75 @@ var express = require('express');
 const router = express.Router();
 var app = express();
 
+var allowCrossDomain = function(req, res, next) {
+
+
+
+  res.header('Access-Control-Allow-Origin', '*');
+
+
+
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+
+
+
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
+
+
+
+
+
+
+
+
+
+  // intercept OPTIONS method
+
+
+
+  if ('OPTIONS' == req.method) {
+
+
+
+    res.send(200);
+
+
+
+  }
+
+
+
+  else {
+
+
+
+    next();
+
+
+
+  }
+
+
+};
+
+
+
+
+
+
+
+
+
+app.configure(function () {
+
+
+
+  app.use(allowCrossDomain);
+
+
+
+});
+
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -74,7 +143,7 @@ app.get('/patients/:qrcode/', function (request, response) {
 });
 
 app.post('/post/user/', function(request, response) {
-  const data = {pass: request.params.password, type: request.params.type, mail: request.params.email};
+  const data = {pass: request.body.password, type: request.body.type, mail: request.body.email};
 
   pg.connect(url, function(err, client, done) {
     client.query('insert into users (password, type, email) values (\'$1\', \'$2\', \'$3\')', [data.pass, data.type, data.mail], function(err, result) {

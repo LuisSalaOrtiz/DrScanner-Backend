@@ -2,6 +2,10 @@ var express = require('express');
 const router = express.Router();
 var app = express();
 
+var bodyParser = require('body-parser');
+app.use(bodyParser.json()); // support json encoded bodies
+app.use(bodyParser.urlencoded({ extended: true }));
+
 var pg = require('pg');
 pg.defaults.ssl = true;
 
@@ -70,7 +74,7 @@ app.get('/patients/:qrcode/', function (request, response) {
   });
 });
 
-router.post('/post/user/', express.json(), function(request, response) {
+app.post('/post/user/', function(request, response) {
   const data = {pass: request.body.password, type: request.body.type, mail: request.body.email};
 
   pg.connect(url, function(err, client, done) {

@@ -1,1 +1,3 @@
 heroku pg:psql DATABASE_URL --app morning-caverns-51343
+
+heroku logs --tail --app morning-caverns-51343

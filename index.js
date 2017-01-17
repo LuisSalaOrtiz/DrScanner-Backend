@@ -1,6 +1,7 @@
 var express = require('express');
 const router = express.Router();
 var app = express();
+app.use(express.urlencoded({limit: '50mb'}));
 
 // var allowCrossDomain = function(req, res, next) {
 //

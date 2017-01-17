@@ -238,7 +238,6 @@ app.post('/post/patient/part3/', function(request, response) {
   const data1 = {email: request.body.email, marital: request.body.marital, gender: request.body.gender, phone: request.body.phone, weight: request.body.weight, height: request.body.height, blood: request.body.blood};
   const data2 = {pid: request.body.pid, aid: request.body.aid, hcid: request.body.hcid, age: request.body.age, vid: request.body.vid};
   console.log('Post new patient personal_info');
-  console.log(data);
   pg.connect(url, function(err, client, done) {
 
     //First Query

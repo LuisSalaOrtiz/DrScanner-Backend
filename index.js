@@ -199,7 +199,6 @@ app.get('/patient/:qrcode/:address/:hcnum/', function (request, response) {
 app.post('/post/patient/part2/', function(request, response) {
   const data = {pid: request.body.pid};
   console.log('Post visits');
-  console.log(data);
   pg.connect(url, function(err, client, done) {
     client.query('insert into visits (pid, did) values ($1, 1)', [data.pid], function(err, result) {
 

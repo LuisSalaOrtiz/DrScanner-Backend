@@ -121,7 +121,7 @@ app.post('/post/user/', function(request, response) {
 //Posting a patient
 //_____________________________________________________________________________________________
 app.post('/post/patient/part1/', function(request, response) {
-  const data = {qr: request.body.qrcode, pf: request.body.pfirst, ssn: request.body.ssn, address: request.body.address, hcname: request.body.hcname, hcnum: request.body.hcnum};
+  const data = {qr: request.body.qrcode, pf: request.body.pfirst, pl: request.body.plast, ssn: request.body.ssn, address: request.body.address, hcname: request.body.hcname, hcnum: request.body.hcnum};
   console.log('Post new patient');
   console.log(data);
   pg.connect(url, function(err, client, done) {
@@ -164,7 +164,7 @@ app.post('/post/patient/part1/', function(request, response) {
       else
       {
         response.json(result.rows);
-        console.log(result.rows);
+        console.log('complete');
       }
     });
   });
@@ -227,7 +227,7 @@ app.get('/patients/vid/:qrcode/', function (request, response) {
 
 app.post('/post/patient/part3/', function(request, response) {
   const data1 = {email: request.body.email, marital: request.body.marital, gender: request.body.gender, phone: request.body.phone, weight: request.body.weight, height: request.body.height, blood: request.body.blood};
-  const data2 = {pid: request.body.pid, aid: request.body.aid, hcid: request.body.hcid, age: request.body.age, vid: request.body.vid, diagid: request.body.diagid};
+  const data2 = {pid: request.body.pid, aid: request.body.aid, hcid: request.body.hcid, age: request.body.age, vid: request.body.vid};
   console.log('Post new patient personal_info');
   console.log(data);
   pg.connect(url, function(err, client, done) {

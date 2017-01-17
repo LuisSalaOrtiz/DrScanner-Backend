@@ -153,6 +153,14 @@ app.post('/post/patient/part1/', function(request, response) {
         console.log(result.rows);
       }
     });
+  });
+});
+
+app.post('/post/patient/part1.5/', function(request, response) {
+  const data = {hcname: request.body.hcname, hcnum: request.body.hcnum};
+  console.log('Post new patient');
+  console.log(data);
+  pg.connect(url, function(err, client, done) {
 
     //Third query
     client.query('insert into healthcare (hcname, hcnum) values ($1, $2)', [data.hcname, data.hcnum], function(err, result) {

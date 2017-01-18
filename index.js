@@ -119,16 +119,227 @@ app.post('/post/user/', function(request, response) {
 });
 
 
-//Posting a patient
-//_____________________________________________________________________________________________
-app.post('/post/patient/part1/', function(request, response) {
-  const data = {qr: request.body.qrcode, pf: request.body.pfirst, pl: request.body.plast, ssn: request.body.ssn, address: request.body.address, hcname: request.body.hcname, hcnum: request.body.hcnum};
-  console.log('Post new patient');
-  console.log(data);
+// //Posting a patient
+// //_____________________________________________________________________________________________
+// app.post('/post/patient/part1/', function(request, response) {
+//   const data = {qr: request.body.qrcode, pf: request.body.pfirst, pl: request.body.plast, ssn: request.body.ssn, address: request.body.address, hcname: request.body.hcname, hcnum: request.body.hcnum};
+//   console.log('Post new patient');
+//   console.log(data);
+//   pg.connect(url, function(err, client, done) {
+//
+//     //First Query
+//     client.query('insert into patient (qrcode, pfirst, plast, ssn) values ($1, $2, $3, $4)', [data.qr, data.pf, data.pl, data.ssn], function(err, result) {
+//       if(err) {
+//         done();
+//         console.log(err);
+//         return response.status(500).json({success: false, data: err});
+//       }
+//       else
+//       {
+//         response.json(result.rows);
+//         console.log(result.rows);
+//       }
+//     });
+//
+//     //Second query
+//     client.query('insert into address (address) values ($1)', [data.address], function(err, result) {
+//       if(err) {
+//         done();
+//         console.log(err);
+//         return response.status(500).json({success: false, data: err});
+//       }
+//       else
+//       {
+//         response.json(result.rows);
+//         console.log(result.rows);
+//       }
+//     });
+//   });
+// });
+//
+// app.post('/post/patient/part1.5/', function(request, response) {
+//   const data = {hcname: request.body.hcname, hcnum: request.body.hcnum};
+//   console.log('Post new patient');
+//   console.log(data);
+//   pg.connect(url, function(err, client, done) {
+//
+//     //Third query
+//     client.query('insert into healthcare (hcname, hcnum) values ($1, $2)', [data.hcname, data.hcnum], function(err, result) {
+//       if(err) {
+//         done();
+//         console.log(err);
+//         return response.status(500).json({success: false, data: err});
+//       }
+//       else
+//       {
+//         response.json(result.rows);
+//         console.log('complete');
+//       }
+//     });
+//   });
+// });
+//
+// //Getting initial ids
+// app.get('/patient/:qrcode/:address/:hcnum/', function (request, response) {
+//   const data = {qr: request.params.qrcode, addr: request.params.address, hcnum: request.params.hcnum};
+//   pg.connect(url, function(err, client, done) {
+//     client.query('SELECT patient.pid,address.aid,healthcare.hcid FROM patient,address,healthcare WHERE qrcode=$1 AND address=$2 AND hcnum=$3', [data.qr, data.addr, data.hcnum], function(err, result) {
+//       done();
+//       if (err)
+//       { console.error(err); response.send("Error " + err); }
+//       else
+//       {
+//         response.json(result.rows);
+//         console.log(result.rows);
+//       }
+//     });
+//   });
+// });
+//
+// app.post('/post/patient/part2/', function(request, response) {
+//   const data = {pid: request.body.pid};
+//   console.log('Post visits');
+//   pg.connect(url, function(err, client, done) {
+//     client.query('insert into visits (pid, did) values ($1, 1)', [data.pid], function(err, result) {
+//
+//       if(err) {
+//         done();
+//         console.log(err);
+//         return response.status(500).json({success: false, data: err});
+//       }
+//       else
+//       {
+//         response.json(result.rows);
+//         console.log(result.rows);
+//       }
+//     });
+//   });
+// });
+//
+// //Getting vid
+// app.get('/patients/vid/:qrcode/', function (request, response) {
+//   const data = {qr: request.params.qrcode};
+//   pg.connect(url, function(err, client, done) {
+//     client.query('SELECT vid FROM patient,visits WHERE qrcode=$1 AND patient.pid=visits.pid', [data.qr], function(err, result) {
+//       done();
+//       if (err)
+//       { console.error(err); response.send("Error " + err); }
+//       else
+//       {
+//         response.json(result.rows);
+//         console.log(result.rows);
+//       }
+//     });
+//   });
+// });
+//
+// app.post('/post/patient/part3/', function(request, response) {
+//   const data1 = {email: request.body.email, marital: request.body.marital, gender: request.body.gender, phone: request.body.phone, weight: request.body.weight, height: request.body.height, blood: request.body.blood};
+//   const data2 = {pid: request.body.pid, aid: request.body.aid, hcid: request.body.hcid, age: request.body.age, vid: request.body.vid};
+//   console.log('Post new patient personal_info');
+//   pg.connect(url, function(err, client, done) {
+//
+//     //First Query
+//     client.query('insert into personal_info values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)', [data1.email, data1.marital, data1.gender, data1.phone, data1.weight, data1.height, data1.blood, data2.pid, data2.aid, data2.hcid, data2.age], function(err, result) {
+//       if(err) {
+//         done();
+//         console.log(err);
+//         return response.status(500).json({success: false, data: err});
+//       }
+//       else
+//       {
+//         response.json(result.rows);
+//         console.log(result.rows);
+//       }
+//     });
+//
+//     //Second query
+//     client.query('insert into diagnostic (vid) values ($1)', [data2.vid], function(err, result) {
+//       if(err) {
+//         done();
+//         console.log(err);
+//         return response.status(500).json({success: false, data: err});
+//       }
+//       else
+//       {
+//         response.json(result.rows);
+//         console.log(result.rows);
+//       }
+//     });
+//   });
+// });
+//
+// //Getting diagid
+// app.get('/patient/:qrcode/:vid', function (request, response) {
+//   const data = {qr: request.params.qrcode, vid:request.params.vid};
+//   pg.connect(url, function(err, client, done) {
+//     client.query('SELECT diagid FROM patient,visits,diagnostic WHERE qrcode=$1 AND patient.pid=visits.pid AND visits.vid=diagnostic.vid AND diagnostic.vid=$2', [data.qr, data.vid], function(err, result) {
+//       done();
+//       if (err)
+//       { console.error(err); response.send("Error " + err); }
+//       else
+//       {
+//         response.json(result.rows);
+//         console.log(result.rows);
+//       }
+//     });
+//   });
+// });
+//
+// app.post('/post/patient/part4/', function(request, response) {
+//   const data = {diagid: request.body.diagid, cname: request.body.cname, severity: request.body.severity};
+//   console.log('Post conditions');
+//   console.log(data);
+//   pg.connect(url, function(err, client, done) {
+//     client.query('insert into condition (diagid, cname, severity) values ($1, $2, $3)', [data.diagid, data.cname, data.severity], function(err, result) {
+//
+//       if(err) {
+//         done();
+//         console.log(err);
+//         return response.status(500).json({success: false, data: err});
+//       }
+//       else
+//       {
+//         response.json(result.rows);
+//         console.log(result.rows);
+//       }
+//     });
+//   });
+// });
+// //_______________________________________________________________________________________________________________________
+
+//Post a patient
+//_______________________________________________________________________________________________________________________
+app.post('/post/patient/', function(request, response) {
+  const patientData = {qr: request.body.qrcode, pf: request.body.pfirst, pl: request.body.plast, ssn: request.body.ssn};
+  const addressData = {address: request.body.address}
+  const healthData = {hcname: request.body.hcname, hcnum: request.body.hcnum};
+  const personalData = {email: request.body.email, marital: request.body.marital, gender: request.body.gender, phone: request.body.phone, weight: request.body.weight, height: request.body.height, blood: request.body.blood, age: request.body.age};
+  const numberOfCon = request.body.number;
+//  const conditionsData = {cname: request.body.cname, severity: request.body.severity};
+
+  var queryString = 'with addr as (insert into address (address) values ($1) returning aid), health as (insert into healthcare (hcname, hcnum) values ($2, $3) returning hcid), pat as (insert into patient (qrcode, pfirst, plast, ssn) values ($4, $5, $6, $7) returning pid), vis as (insert into visits (pid, did) select pid, 1 from pat returning vid), per_info as (insert into personal_info select $8, $9, $10, $11, $12, $13, $14, pid, aid, hcid, $15 from pat, addr, health), diag as (insert into diagnostic (vid) select vid from vis returning diagid) insert into condition (diagid, cname, severity) values ';
+
+  var listOfElements = [addressData.address, healthData.hcname, healthData.hcnum, patientData.qr, patientData.pf, patientData.pl, patientData.ssn, personalData.email, personalData.marital, personalData.gender, personalData.phone, personalData.weight, personalData.height, personalData.blood, personalData.age];
+
+  //((select diagid from diag), 'Muerte', 'High'), ((select diagid from diag), 'Vida', 'High')'
+
+  for(var i=0; i<numberOfCon; i++)
+  {
+    var identifier = '$' + (16+i);
+    queryString += '((select diagid from diag), '+identifier+', \'High\')';
+    listOfElements.push(request.body['cname'+(i+1)]);
+    if(numberOfCon>(i+1))
+    {
+      queryString += ', '
+    }
+  }
+
+  console.log('Post patient');
   pg.connect(url, function(err, client, done) {
 
-    //First Query
-    client.query('insert into patient (qrcode, pfirst, plast, ssn) values ($1, $2, $3, $4)', [data.qr, data.pf, data.pl, data.ssn], function(err, result) {
+    client.query(queryString, listOfElements, function(err, result) {
+
       if(err) {
         done();
         console.log(err);
@@ -136,171 +347,7 @@ app.post('/post/patient/part1/', function(request, response) {
       }
       else
       {
-        response.json(result.rows);
-        console.log(result.rows);
-      }
-    });
-
-    //Second query
-    client.query('insert into address (address) values ($1)', [data.address], function(err, result) {
-      if(err) {
-        done();
-        console.log(err);
-        return response.status(500).json({success: false, data: err});
-      }
-      else
-      {
-        response.json(result.rows);
-        console.log(result.rows);
-      }
-    });
-  });
-});
-
-app.post('/post/patient/part1.5/', function(request, response) {
-  const data = {hcname: request.body.hcname, hcnum: request.body.hcnum};
-  console.log('Post new patient');
-  console.log(data);
-  pg.connect(url, function(err, client, done) {
-
-    //Third query
-    client.query('insert into healthcare (hcname, hcnum) values ($1, $2)', [data.hcname, data.hcnum], function(err, result) {
-      if(err) {
-        done();
-        console.log(err);
-        return response.status(500).json({success: false, data: err});
-      }
-      else
-      {
-        response.json(result.rows);
-        console.log('complete');
-      }
-    });
-  });
-});
-
-//Getting initial ids
-app.get('/patient/:qrcode/:address/:hcnum/', function (request, response) {
-  const data = {qr: request.params.qrcode, addr: request.params.address, hcnum: request.params.hcnum};
-  pg.connect(url, function(err, client, done) {
-    client.query('SELECT patient.pid,address.aid,healthcare.hcid FROM patient,address,healthcare WHERE qrcode=$1 AND address=$2 AND hcnum=$3', [data.qr, data.addr, data.hcnum], function(err, result) {
-      done();
-      if (err)
-      { console.error(err); response.send("Error " + err); }
-      else
-      {
-        response.json(result.rows);
-        console.log(result.rows);
-      }
-    });
-  });
-});
-
-app.post('/post/patient/part2/', function(request, response) {
-  const data = {pid: request.body.pid};
-  console.log('Post visits');
-  pg.connect(url, function(err, client, done) {
-    client.query('insert into visits (pid, did) values ($1, 1)', [data.pid], function(err, result) {
-
-      if(err) {
-        done();
-        console.log(err);
-        return response.status(500).json({success: false, data: err});
-      }
-      else
-      {
-        response.json(result.rows);
-        console.log(result.rows);
-      }
-    });
-  });
-});
-
-//Getting vid
-app.get('/patients/vid/:qrcode/', function (request, response) {
-  const data = {qr: request.params.qrcode};
-  pg.connect(url, function(err, client, done) {
-    client.query('SELECT vid FROM patient,visits WHERE qrcode=$1 AND patient.pid=visits.pid', [data.qr], function(err, result) {
-      done();
-      if (err)
-      { console.error(err); response.send("Error " + err); }
-      else
-      {
-        response.json(result.rows);
-        console.log(result.rows);
-      }
-    });
-  });
-});
-
-app.post('/post/patient/part3/', function(request, response) {
-  const data1 = {email: request.body.email, marital: request.body.marital, gender: request.body.gender, phone: request.body.phone, weight: request.body.weight, height: request.body.height, blood: request.body.blood};
-  const data2 = {pid: request.body.pid, aid: request.body.aid, hcid: request.body.hcid, age: request.body.age, vid: request.body.vid};
-  console.log('Post new patient personal_info');
-  pg.connect(url, function(err, client, done) {
-
-    //First Query
-    client.query('insert into personal_info values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)', [data1.email, data1.marital, data1.gender, data1.phone, data1.weight, data1.height, data1.blood, data2.pid, data2.aid, data2.hcid, data2.age], function(err, result) {
-      if(err) {
-        done();
-        console.log(err);
-        return response.status(500).json({success: false, data: err});
-      }
-      else
-      {
-        response.json(result.rows);
-        console.log(result.rows);
-      }
-    });
-
-    //Second query
-    client.query('insert into diagnostic (vid) values ($1)', [data2.vid], function(err, result) {
-      if(err) {
-        done();
-        console.log(err);
-        return response.status(500).json({success: false, data: err});
-      }
-      else
-      {
-        response.json(result.rows);
-        console.log(result.rows);
-      }
-    });
-  });
-});
-
-//Getting diagid
-app.get('/patient/:qrcode/:vid', function (request, response) {
-  const data = {qr: request.params.qrcode, vid:request.params.vid};
-  pg.connect(url, function(err, client, done) {
-    client.query('SELECT diagid FROM patient,visits,diagnostic WHERE qrcode=$1 AND patient.pid=visits.pid AND visits.vid=diagnostic.vid AND diagnostic.vid=$2', [data.qr, data.vid], function(err, result) {
-      done();
-      if (err)
-      { console.error(err); response.send("Error " + err); }
-      else
-      {
-        response.json(result.rows);
-        console.log(result.rows);
-      }
-    });
-  });
-});
-
-app.post('/post/patient/part4/', function(request, response) {
-  const data = {diagid: request.body.diagid, cname: request.body.cname, severity: request.body.severity};
-  console.log('Post conditions');
-  console.log(data);
-  pg.connect(url, function(err, client, done) {
-    client.query('insert into condition (diagid, cname, severity) values ($1, $2, $3)', [data.diagid, data.cname, data.severity], function(err, result) {
-
-      if(err) {
-        done();
-        console.log(err);
-        return response.status(500).json({success: false, data: err});
-      }
-      else
-      {
-        response.json(result.rows);
+        response.json({Process: 'Complete', Status: 'Succesful'});
         console.log(result.rows);
       }
     });

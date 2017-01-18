@@ -320,7 +320,7 @@ app.post('/post/patient/', function(request, response) {
 
   var queryString = 'with addr as (insert into address (address) values ($1) returning aid), health as (insert into healthcare (hcname, hcnum) values ($2, $3) returning hcid), pat as (insert into patient (qrcode, pfirst, plast, ssn) values ($4, $5, $6, $7) returning pid), vis as (insert into visits (pid, did) select pid, 1 from pat returning vid), per_info as (insert into personal_info select $8, $9, $10, $11, $12, $13, $14, pid, aid, hcid, $15 from pat, addr, health), diag as (insert into diagnostic (vid) select vid from vis returning diagid) insert into condition (diagid, cname, severity) values ';
 
-  var listOfElements = [addressData.address, healthData.hcname, healthData.hcnum, patientData.qr, patientData.pf, patientData.pl, patientData.ssn, personalData.email, personalData.marital, personalData.gender, personalData.phone, personalData.weight, personalData.height, personalData.blood, personalData.age];
+  var listOfElements = [addressData.address, healthData.hcname, healthData.hcnum, patientData.qr, patientData.pf, patientData.pl, patientData.ssn, personalData.email, personalData.marital, personalData.gender, personalData.weight, personalData.height, personalData.blood, personalData.age, personalData.phone];
 
   //((select diagid from diag), 'Muerte', 'High'), ((select diagid from diag), 'Vida', 'High')'
 

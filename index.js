@@ -118,7 +118,7 @@ app.post('/post/user/', function(request, response) {
   });
 });
 
-app.DELETE('/delete/patient/:qrcode', function(request, response) {
+app.delete('/delete/patient/:qrcode', function(request, response) {
   const data = {qr: request.params.qrcode};
   console.log('Delete a patient');
   console.log(data);

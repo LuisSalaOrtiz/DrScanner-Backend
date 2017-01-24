@@ -147,7 +147,7 @@ app.post('/post/patient/', function(request, response) {
   const healthData = {hcname: request.body.hcname, hcnum: request.body.hcnum};
   const personalData = {email: request.body.email, marital: request.body.marital, gender: request.body.gender, phone: request.body.phone, weight: request.body.weight, height: request.body.height, blood: request.body.blood, age: request.body.age};
   const numberOfCon = request.body.number;
-//  const conditionsData = {cname: request.body.cname, severity: request.body.severity};
+  //  const conditionsData = {cname: request.body.cname, severity: request.body.severity};
 
   var queryString = 'with addr as (insert into address (address) values ($1) returning aid), health as (insert into healthcare (hcname, hcnum) values ($2, $3) returning hcid), pat as (insert into patient (qrcode, pfirst, plast, ssn) values ($4, $5, $6, $7) returning pid), vis as (insert into visits (pid, did) select pid, 1 from pat returning vid), per_info as (insert into personal_info select $8, $9, $10, $11, $12, $13, $14, aid, hcid, pid, $15 from pat, addr, health), diag as (insert into diagnostic (vid) select vid from vis returning diagid) insert into condition (diagid, cname, severity) values ';
 
@@ -229,11 +229,8 @@ app.put('/update/patient/', function(request, response) {
         console.log(result.rows);
       }
     });
-  });
 
-  console.log('Delete duplicates');
-  pg.connect(url, function(err, client, done) {
-
+    console.log('Delete duplicates');
     client.query('delete from condition where exists (select 1 from condition as t2 where t2.cname = condition.cname and t2.diagid = condition.diagid and t2.cid > condition.cid)', function(err, result) {
 
       if(err) {

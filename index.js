@@ -1,28 +1,8 @@
 var express = require('express');
 const router = express.Router();
 var app = express();
-//app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 
-// var allowCrossDomain = function(req, res, next) {
-//
-//   res.header('Access-Control-Allow-Origin', '*');
-//   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-//   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
-// // intercept OPTIONS method
-//   if ('OPTIONS' == req.method) {
-//     res.send(200);
-//   }
-//   else {
-//     next();
-//   }
-// };
-//
-// app.configure(function () {
-//   app.use(allowCrossDomain);
-// });
-//
 var bodyParser = require('body-parser');
-// app.use(express.bodyParser());
 
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -41,24 +21,6 @@ app.set('view engine', 'ejs');
 
 app.get('/', function(request, response) {
   response.render('pages/index');
-});
-
-app.get('/db', function (request, response) {
-  pg.connect(url, function(err, client, done) {
-    client.query('SELECT * FROM test_table', function(err, result) {
-      done();
-      if (err)
-      { console.error(err); response.send("Error " + err); }
-      else
-      {
-
-        //  response.render('pages/db', {results: result.rows} );
-        response.json(result.rows);
-        console.log(result.rows);
-
-      }
-    });
-  });
 });
 
 app.get('/users/:email/:password', function (request, response) {
@@ -195,7 +157,14 @@ app.post('/update/patient/', function(request, response) {
   const personalData = {email: request.body.email, marital: request.body.marital, gender: request.body.gender, phone: request.body.phone, weight: request.body.weight, height: request.body.height, blood: request.body.blood, age: request.body.age};
   const numberOfCon = request.body.number;
 
-  var queryString = 'with pat as (update patient set pfirst=$1, plast=$2, ssn=$3 where qrcode=$4 returning pid), per_info as (update personal_info set email=$5, marital=$6, gender=$7, weight=$8, height=$9, blood=$10, age=$11, phone=$12 where pid=(select pid from pat) returning aid, hcid), addr as (update address set address=$13 where aid=(select aid from per_info)), health as (update healthcare set hcname=$14, hcnum=$15 where hcid=(select hcid from per_info)) insert into condition (diagid, cname, severity) values ';
+  var queryString;
+  if(numberOfCon==0)
+  {
+    queryString = 'with pat as (update patient set pfirst=$1, plast=$2, ssn=$3 where qrcode=$4 returning pid), per_info as (update personal_info set email=$5, marital=$6, gender=$7, weight=$8, height=$9, blood=$10, age=$11, phone=$12 where pid=(select pid from pat) returning aid, hcid), addr as (update address set address=$13 where aid=(select aid from per_info)) update healthcare set hcname=$14, hcnum=$15 where hcid=(select hcid from per_info)';
+  }
+  else {
+    queryString = 'with pat as (update patient set pfirst=$1, plast=$2, ssn=$3 where qrcode=$4 returning pid), per_info as (update personal_info set email=$5, marital=$6, gender=$7, weight=$8, height=$9, blood=$10, age=$11, phone=$12 where pid=(select pid from pat) returning aid, hcid), addr as (update address set address=$13 where aid=(select aid from per_info)), health as (update healthcare set hcname=$14, hcnum=$15 where hcid=(select hcid from per_info)) insert into condition (diagid, cname, severity) values ';
+  }
   //((select diagid from patient, visits, diagnostic where patient.pid=(select pid from pat)), $16, 'High')';
 
   var listOfElements = [patientData.pf, patientData.pl, patientData.ssn, patientData.qr, personalData.email, personalData.marital, personalData.gender, personalData.weight, personalData.height, personalData.blood, personalData.age, personalData.phone, addressData.address, healthData.hcname, healthData.hcnum];

@@ -225,7 +225,6 @@ app.put('/update/patient/', function(request, response) {
       }
       else
       {
-        response.json({Process: 'Complete', Status: 'Succesful'});
         console.log(result.rows);
       }
     });
@@ -240,7 +239,7 @@ app.put('/update/patient/', function(request, response) {
       }
       else
       {
-        response.json({Delete_Duplicates: 'Complete', Status: 'Succesful'});
+        response.json({Process: 'Complete', Delete_Duplicates: 'Complete', Status: 'Succesful'});
         console.log(result.rows);
       }
     });

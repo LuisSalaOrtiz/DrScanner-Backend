@@ -205,7 +205,7 @@ app.put('/update/patient/', function(request, response) {
   for(var i=0; i<numberOfCon; i++)
   {
     var identifier = '$' + (16+i);
-    queryString += '(((select diagid from patient, visits, diagnostic where patient.pid=(select pid from pat)), '+identifier+', \'High\')';
+    queryString += '((select diagid from patient, visits, diagnostic where patient.pid=(select pid from pat)), '+identifier+', \'High\')';
     listOfElements.push(request.body['cname'+(i+1)]);
     if(numberOfCon>(i+1))
     {
@@ -213,7 +213,7 @@ app.put('/update/patient/', function(request, response) {
     }
   }
 
-  console.log('Post patient');
+  console.log('Update patient');
   pg.connect(url, function(err, client, done) {
 
     client.query(queryString, listOfElements, function(err, result) {

@@ -188,7 +188,7 @@ app.post('/post/patient/', function(request, response) {
 
 //Update a patient info
 //________________________________________________________________________________________________________________________
-app.put('/update/patient/', function(request, response) {
+app.post('/update/patient/', function(request, response) {
   const patientData = {qr: request.body.qrcode, pf: request.body.pfirst, pl: request.body.plast, ssn: request.body.ssn};
   const addressData = {address: request.body.address}
   const healthData = {hcname: request.body.hcname, hcnum: request.body.hcnum};
@@ -212,7 +212,7 @@ app.put('/update/patient/', function(request, response) {
   for(var i=0; i<numberOfCon; i++)
   {
     var identifier = '$' + (16+i);
-    queryString += '((select diagid from patient, visits, diagnostic where patient.pid=(select pid from pat)), '+identifier+', \'High\')';
+    queryString += '((select diagid from pat natural join visits natural join diagnostic), '+identifier+', \'High\')';
     listOfElements.push(request.body['cname'+(i+1)]);
     if(numberOfCon>(i+1))
     {
@@ -232,25 +232,24 @@ app.put('/update/patient/', function(request, response) {
       }
       else
       {
-        response.json({Process: 'Complete', Delete_Duplicates: 'Incomplete', Status: 'Succesful'});
         console.log(result.rows);
       }
     });
 
-    // console.log('Delete duplicates');
-    // client.query('delete from condition where exists (select 1 from condition as t2 where t2.cname = condition.cname and t2.diagid = condition.diagid and t2.cid > condition.cid)', function(err, result) {
-    //
-    //   if(err) {
-    //     done();
-    //     console.log(err);
-    //     return response.status(500).json({success: false, data: err});
-    //   }
-    //   else
-    //   {
-    //     response.json({Process: 'Complete', Delete_Duplicates: 'Complete', Status: 'Succesful'});
-    //     console.log(result.rows);
-    //   }
-    // });
+    console.log('Delete duplicates');
+    client.query('delete from condition where exists (select 1 from condition as t2 where t2.cname = condition.cname and t2.diagid = condition.diagid and t2.cid > condition.cid)', function(err, result) {
+
+      if(err) {
+        done();
+        console.log(err);
+        return response.status(500).json({success: false, data: err});
+      }
+      else
+      {
+        response.json({Process: 'Complete', Delete_Duplicates: 'Complete', Status: 'Succesful'});
+        console.log(result.rows);
+      }
+    });
   });
 });
 //_______________________________________________________________________________________________________________________

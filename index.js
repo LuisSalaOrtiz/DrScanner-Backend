@@ -188,7 +188,7 @@ app.post('/post/patient/', function(request, response) {
 
 //Update a patient info
 //________________________________________________________________________________________________________________________
-app.post('/update/patient/', function(request, response) {
+app.put('/update/patient/', function(request, response) {
   const patientData = {qr: request.body.qrcode, pf: request.body.pfirst, pl: request.body.plast, ssn: request.body.ssn};
   const addressData = {address: request.body.address}
   const healthData = {hcname: request.body.hcname, hcnum: request.body.hcnum};
